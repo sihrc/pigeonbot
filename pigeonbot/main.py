@@ -19,7 +19,11 @@ def on_message(message):
        print("Relaying message.")
 
        if PREVIOUS_MESSAGES[0] is not None:
-           yield from CLIENT.delete_message(PREVIOUS_MESSAGES[0])
+           try:
+               yield from CLIENT.delete_message(PREVIOUS_MESSAGES[0])
+           finally:
+               PREVIOUS_MESSAGES[0] = None
+
 
        message = yield from CLIENT.send_message(CLIENT.get_channel("254051680222445568"), message.content)
        PREVIOUS_MESSAGES[0] = message
